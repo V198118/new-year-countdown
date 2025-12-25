@@ -2,7 +2,7 @@
 window.timerConfig = {
     // Позиция таймера
     position: {
-        left: "50%",
+        left: "80%",
         top: "50%"
     },
     
@@ -12,7 +12,7 @@ window.timerConfig = {
     labelColor: "#FFFFFF",
     
     // Прозрачность затемняющего слоя (0 = прозрачно, 1 = полностью черный)
-    overlayOpacity: 0.3,
+    overlayOpacity: 0,
     
     // Настройки видео (если нужно управлять из JS)
     videoSettings: {

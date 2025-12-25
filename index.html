@@ -38,14 +38,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0);
             z-index: 2;
         }
         
         #countdown-container {
             position: absolute;
             z-index: 3;
-            left: var(--timer-left, 50%);
+            left: var(--timer-left, 80%);
             top: var(--timer-top, 50%);
             transform: translate(-50%, -50%);
             text-align: center;
@@ -230,7 +230,7 @@
     </div>
     
     <!-- Кнопка звука -->
-    <button id="mute-button" title="Включить/выключить звук">🔇</button>
+    <button id="mute-button" title="Включить/выключить звук"></button>
     
     <!-- Индикатор состояния видео -->
     <div id="video-status">Видео загружается...</div>
@@ -338,7 +338,7 @@
             // Кнопка mute/unmute
             muteButton.addEventListener('click', function() {
                 video.muted = !video.muted;
-                muteButton.textContent = video.muted ? '🔇' : '🔊';
+                muteButton.textContent = video.muted ? '' : '';
                 muteButton.title = video.muted ? 'Включить звук' : 'Выключить звук';
             });
             

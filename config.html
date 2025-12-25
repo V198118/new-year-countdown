@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки таймера</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        h1 i {
+            font-size: 1.2em;
+        }
+        
+        .subtitle {
+            color: #aaa;
+            font-size: 1.1em;
+        }
+        
+        .preview-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        #preview {
+            font-size: 60px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 5px;
+        }
+        
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .config-group {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .config-group h3 {
+            margin-bottom: 15px;
+            color: #4CAF50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .config-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-weight: 500;
+        }
+        
+        .config-group input, 
+        .config-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .config-group input:focus,
+        .config-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        .color-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .preset-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .preset-gold { background: linear-gradient(135deg, #FFD700, #FFA500); }
+        .preset-blue { background: linear-gradient(135deg, #00FFFF, #0077FF); }
+        .preset-red { background: linear-gradient(135deg, #FF0000, #FF6666); }
+        .preset-green { background: linear-gradient(135deg, #00FF00, #00AA00); }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-width: 200px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-view {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+        }
+        
+        .btn-view:hover {
+            background: linear-gradient(135deg, #1976D2, #1565C0);
+        }
+        
+        .info-box {
+            background: rgba(33, 150, 243, 0.1);
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            color: #90CAF9;
+        }
+        
+        .info-box h4 {
+            margin-bottom: 10px;
+            color: #2196F3;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚙️ Настройки таймера</h1>
+            <p class="subtitle">Настройте внешний вид таймера до Нового Года</p>
+        </header>
+        
+        <div class="preview-section">
+            <h3>Предпросмотр</h3>
+            <div id="preview">123:45:67</div>
+            <p>Формат: Часы:Минуты:Секунды (максимум 999 часов)</p>
+        </div>
+        
+        <div class="config-grid">
+            <div class="config-group">
+                <h3>📍 Позиция таймера</h3>
+                <label for="pos-x">Позиция по X:</label>
+                <input type="text" id="pos-x" placeholder="50% или 1000px" value="50%">
+                
+                <label for="pos-y">Позиция по Y:</label>
+                <input type="text" id="pos-y" placeholder="50% или 800px" value="50%">
+                
+                <div class="info-box">
+                    <h4>💡 Подсказка:</h4>
+                    <p>Используйте проценты (%) для относительного позиционирования или пиксели (px) для точного размещения.</p>
+                </div>
+            </div>
+            
+            <div class="config-group">
+                <h3>🎨 Внешний вид</h3>
+                <label for="font-size">Размер шрифта (px):</label>
+                <input type="number" id="font-size" min="50" max="500" value="200">
+                
+                <div class="color-inputs">
+                    <div>
+                        <label for="color">Цвет цифр:</label>
+                        <input type="color" id="color" value="#ffffff">
+                    </div>
+                    <div>
+                        <label for="label-color">Цвет подписей:</label>
+                        <input type="color" id="label-color" value="#ffffff">
+                    </div>
+                </div>
+                
+                <label for="overlay">Затемнение фона:</label>
+                <select id="overlay">
+                    <option value="0">0% - Без затемнения</option>
+                    <option value="0.1">10% - Легкое</option>
+                    <option value="0.2">20% - Среднее</option>
+                    <option value="0.3" selected>30% - Рекомендуется</option>
+                    <option value="0.4">40% - Сильное</option>
+                    <option value="0.5">50% - Очень сильное</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="config-group">
+            <h3>🚀 Быстрые пресеты</h3>
+            <div class="presets">
+                <button class="preset-btn preset-gold" data-preset="gold">Золотой</button>
+                <button class="preset-btn preset-blue" data-preset="blue">Ледяной</button>
+                <button class="preset-btn preset-red" data-preset="red">Красный</button>
+                <button class="preset-btn preset-green" data-preset="green">Зеленый</button>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button class="btn btn-primary" id="save-btn">
+                💾 Сохранить настройки
+            </button>
+            <button class="btn btn-view" id="view-btn" onclick="window.open('index.html', '_blank')">
+                👁️ Посмотреть таймер
+            </button>
+            <button class="btn btn-secondary" id="reset-btn">
+                🔄 Сбросить настройки
+            </button>
+        </div>
+        
+        <div class="info-box">
+            <h4>ℹ️ Инструкция:</h4>
+            <p>1. Настройте параметры с помощью полей выше</p>
+            <p>2. Нажмите "Сохранить настройки"</p>
+            <p>3. Откройте таймер в новой вкладке или на LED-экране</p>
+            <p>4. Настройки автоматически применятся на всех открытых страницах таймера</p>
+            <p><strong>Ссылка на таймер:</strong> <code id="timer-url"></code></p>
+            <p><strong>Ссылка на настройки:</strong> <code id="config-url"></code></p>
+        </div>
+        
+        <footer>
+            <p>Таймер до Нового Года • Версия 2.0 • LED-экран 7360×1620</p>
+            <p>Настройки сохраняются автоматически и применяются в реальном времени</p>
+        </footer>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // Определение пресетов
+        const presets = {
+            gold: {
+                position: { left: "50%", top: "70%" },
+                fontSize: 220,
+                color: "#FFD700",
+                labelColor: "#FFA500",
+                overlayOpacity: 0.4
+            },
+            blue: {
+                position: { left: "60%", top: "60%" },
+                fontSize: 180,
+                color: "#00FFFF",
+                labelColor: "#87CEEB",
+                overlayOpacity: 0.2
+            },
+            red: {
+                position: { left: "40%", top: "80%" },
+                fontSize: 200,
+                color: "#FF0000",
+                labelColor: "#FF6666",
+                overlayOpacity: 0.25
+            },
+            green: {
+                position: { left: "50%", top: "50%" },
+                fontSize: 190,
+                color: "#00FF00",
+                labelColor: "#90EE90",
+                overlayOpacity: 0.35
+            }
+        };
+        
+        // Загрузка текущих настроек
+        function loadCurrentConfig() {
+            const savedConfig = localStorage.getItem('timerConfig');
+            if (savedConfig) {
+                try {
+                    const config = JSON.parse(savedConfig);
+                    
+                    // Заполняем поля формы
+                    document.getElementById('pos-x').value = config.position.left;
+                    document.getElementById('pos-y').value = config.position.top;
+                    document.getElementById('font-size').value = config.fontSize;
+                    document.getElementById('color').value = config.color;
+                    document.getElementById('label-color').value = config.labelColor;
+                    document.getElementById('overlay').value = config.overlayOpacity || 0.3;
+                    
+                    updatePreview();
+                } catch (e) {
+                    console.error('Ошибка загрузки настроек:', e);
+                }
+            }
+        }
+        
+        // Обновление предпросмотра
+        function updatePreview() {
+            const preview = document.getElementById('preview');
+            const fontSize = parseInt(document.getElementById('font-size').value) || 200;
+            const color = document.getElementById('color').value;
+            
+            preview.style.fontSize = (fontSize * 0.3) + 'px';
+            preview.style.color = color;
+            preview.style.textShadow = `2px 2px 10px ${color}40`;
+        }
+        
+        // Сохранение настроек
+        function saveConfig() {
+            const newConfig = {
+                position: {
+                    left: document.getElementById('pos-x').value.trim() || "50%",
+                    top: document.getElementById('pos-y').value.trim() || "50%"
+                },
+                fontSize: parseInt(document.getElementById('font-size').value) || 200,
+                color: document.getElementById('color').value,
+                labelColor: document.getElementById('label-color').value,
+                overlayOpacity: parseFloat(document.getElementById('overlay').value)
+            };
+            
+            // Сохраняем в localStorage
+            localStorage.setItem('timerConfig', JSON.stringify(newConfig));
+            
+            // Обновляем предпросмотр
+            updatePreview();
+            
+            // Показываем уведомление
+            const saveBtn = document.getElementById('save-btn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '✓ Сохранено!';
+            saveBtn.style.background = 'linear-gradient(135deg, #2E7D32, #1B5E20)';
+            
+            setTimeout(() => {
+                saveBtn.innerHTML = originalText;
+                saveBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+            }, 2000);
+            
+            // Обновляем URL'ы
+            updateUrls();
+        }
+        
+        // Применение пресета
+        function applyPreset(presetName) {
+            if (presets[presetName]) {
+                const preset = presets[presetName];
+                
+                document.getElementById('pos-x').value = preset.position.left;
+                document.getElementById('pos-y').value = preset.position.top;
+                document.getElementById('font-size').value = preset.fontSize;
+                document.getElementById('color').value = preset.color;
+                document.getElementById('label-color').value = preset.labelColor;
+                document.getElementById('overlay').value = preset.overlayOpacity;
+                
+                updatePreview();
+                
+                // Автоматически сохраняем пресет
+                setTimeout(saveConfig, 100);
+            }
+        }
+        
+        // Сброс настроек
+        function resetConfig() {
+            if (confirm('Вы уверены, что хотите сбросить все настройки к значениям по умолчанию?')) {
+                // Используем конфиг по умолчанию из config.js
+                if (window.defaultConfig) {
+                    localStorage.setItem('timerConfig', JSON.stringify(window.defaultConfig));
+                    loadCurrentConfig();
+                    saveConfig();
+                }
+            }
+        }
+        
+        // Обновление URL'ов для информации
+        function updateUrls() {
+            const baseUrl = window.location.href.replace('config.html', '');
+            document.getElementById('timer-url').textContent = baseUrl + 'index.html';
+            document.getElementById('config-url').textContent = baseUrl + 'config.html';
+        }
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем текущие настройки
+            loadCurrentConfig();
+            
+            // Назначаем обработчики событий
+            document.getElementById('save-btn').addEventListener('click', saveConfig);
+            document.getElementById('reset-btn').addEventListener('click', resetConfig);
+            
+            // Обработчики для пресетов
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const presetName = this.getAttribute('data-preset');
+                    applyPreset(presetName);
+                });
+            });
+            
+            // Обновление предпросмотра при изменении настроек
+            document.querySelectorAll('input, select').forEach(input => {
+                input.addEventListener('input', updatePreview);
+                input.addEventListener('change', updatePreview);
+            });
+            
+            // Обновляем URL'ы
+            updateUrls();
+            
+            // Показываем примерный предпросмотр
+            updatePreview();
+        });
+    </script>
+</body>
+</html>

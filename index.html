@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Таймер до Нового Года с видеофоном</title>
+    <title>Таймер до Нового Года</title>
     <style>
         * {
             margin: 0;
@@ -31,30 +31,33 @@
             z-index: 1;
         }
         
-        /* Затемнение фона для лучшей читаемости таймера */
+        /* Затемнение фона для контраста */
         #overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0);
-            z-index: 0;
+            background: rgba(0, 0, 0, var(--overlay-opacity, 0.3));
+            z-index: 2;
+            transition: background-color 0.5s;
         }
         
+        /* Контейнер таймера */
         #countdown-container {
             position: absolute;
             z-index: 3;
-            left: var(--timer-left, 80%);
+            left: var(--timer-left, 50%);
             top: var(--timer-top, 50%);
             transform: translate(-50%, -50%);
             text-align: center;
-            padding: 10px;
+            padding: 20px;
+            min-width: 1500px;
         }
         
         #countdown {
             display: flex;
-            gap: 20px;
+            gap: 40px;
             justify-content: center;
             align-items: center;
         }
@@ -63,10 +66,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-width: 300px;
         }
         
         .time-value {
-            font-size: var(--font-size, 100px);
+            font-size: var(--font-size, 200px);
             font-weight: bold;
             line-height: 1;
             color: var(--timer-color, #ffffff);
@@ -74,98 +78,59 @@
                 3px 3px 10px rgba(0, 0, 0, 0.8),
                 0 0 20px rgba(255, 255, 255, 0.3);
             letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
         }
         
         .time-label {
-            font-size: calc(var(--font-size, 100px) * 0.3);
+            font-size: calc(var(--font-size, 200px) * 0.25);
             color: var(--label-color, #ffffff);
-            margin-top: 10px;
+            margin-top: 15px;
             text-transform: uppercase;
             letter-spacing: 3px;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
             opacity: 0.9;
-        }
-        
-        .separator {
-            font-size: calc(var(--font-size, 100px) * 0.8);
-            color: var(--timer-color, #ffffff);
-            margin: 0 5px;
-            line-height: 1;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
-        }
-        
-        /* Кнопка включения/выключения звука */
-        
-        }
-        
-        /* Панель настройки */
-        #config-panel {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.85);
-            padding: 20px;
-            border-radius: 10px;
-            color: white;
-            z-index: 1000;
-            display: none;
-            width: 300px;
-            border: 1px solid #444;
-        }
-        
-        .config-group {
-            margin: 15px 0;
-        }
-        
-        .config-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #ccc;
-        }
-        
-        .config-group input, .config-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #555;
-            border-radius: 4px;
-            background: #222;
-            color: white;
-        }
-        
-        #save-config {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            width: 100%;
             font-weight: bold;
         }
         
-        #toggle-config {
-            background: #2196F3;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
+        .separator {
+            font-size: calc(var(--font-size, 200px) * 0.7);
+            color: var(--timer-color, #ffffff);
+            margin: 0 10px;
+            line-height: 1;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+            font-weight: bold;
         }
         
-        /* Индикатор воспроизведения видео */
-        #video-status {
+        /* Ссылка на настройки (маленькая в углу) */
+        #settings-link {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 16px;
+            text-decoration: none;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        #settings-link:hover {
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        /* Индикатор настроек */
+        #config-indicator {
             position: absolute;
             top: 20px;
             left: 20px;
             background: rgba(0, 0, 0, 0.7);
-            color: #0f0;
-            padding: 5px 10px;
+            color: #4CAF50;
+            padding: 8px 15px;
             border-radius: 5px;
-            font-size: 12px;
+            font-size: 14px;
             z-index: 100;
             display: none;
         }
@@ -174,9 +139,7 @@
 <body>
     <!-- Видео-фон -->
     <video id="video-background" autoplay muted loop playsinline>
-        <!-- Основное видео -->
         <source src="background.mp4" type="video/mp4">
-        <!-- Запасной вариант -->
         <source src="background.webm" type="video/webm">
         Ваш браузер не поддерживает видео.
     </video>
@@ -188,12 +151,7 @@
     <div id="countdown-container">
         <div id="countdown">
             <div class="time-unit">
-                <div id="days" class="time-value">00</div>
-                <div class="time-label">дней</div>
-            </div>
-            <div class="separator">:</div>
-            <div class="time-unit">
-                <div id="hours" class="time-value">00</div>
+                <div id="hours" class="time-value">000</div>
                 <div class="time-label">часов</div>
             </div>
             <div class="separator">:</div>
@@ -209,151 +167,51 @@
         </div>
     </div>
     
-    <!-- Кнопка звука -->
-    <button id="mute-button" title="Включить/выключить звук"></button>
+    <!-- Ссылка на страницу настроек -->
+    <a href="config.html" id="settings-link" target="_blank">⚙️ Настройки</a>
     
-    <!-- Индикатор состояния видео -->
-    <div id="video-status">Видео загружается...</div>
-    
-    <!-- Панель настройки -->
-    <div id="config-panel">
-        <h3 style="margin-bottom: 20px; color: #4CAF50;">⚙️ Настройка таймера</h3>
-        
-        <div class="config-group">
-            <label>Позиция X:</label>
-            <input type="text" id="input-left" placeholder="50% или 1000px">
-        </div>
-        
-        <div class="config-group">
-            <label>Позиция Y:</label>
-            <input type="text" id="input-top" placeholder="50% или 800px">
-        </div>
-        
-        <div class="config-group">
-            <label>Размер шрифта (px):</label>
-            <input type="number" id="input-font-size" min="50" max="500" placeholder="200">
-        </div>
-        
-        <div class="config-group">
-            <label>Цвет цифр:</label>
-            <input type="color" id="input-color" value="#ffffff">
-        </div>
-        
-        <div class="config-group">
-            <label>Цвет подписей:</label>
-            <input type="color" id="input-label-color" value="#ffffff">
-        </div>
-        
-        <div class="config-group">
-            <label>Прозрачность фона:</label>
-            <select id="input-overlay">
-                <option value="0">0% - Нет затемнения</option>
-                <option value="0.1">10% - Легкое</option>
-                <option value="0.2">20% - Среднее</option>
-                <option value="0.3" selected>30% - Рекомендуется</option>
-                <option value="0.4">40% - Сильное</option>
-                <option value="0.5">50% - Очень сильное</option>
-            </select>
-        </div>
-        
-        <button id="save-config">💾 Сохранить настройки</button>
-        <button id="toggle-config">✖️ Закрыть панель</button>
-    </div>
+    <!-- Индикатор применения настроек -->
+    <div id="config-indicator">Настройки применены ✓</div>
 
     <!-- Подключение скриптов -->
     <script src="config.js"></script>
     <script>
-        // Основной скрипт таймера
+        // Основной скрипт таймера (формат: часы:минуты:секунды)
         function updateCountdown() {
             const now = new Date();
             const currentYear = now.getFullYear();
             
+            // Дата следующего Нового года
             let newYearDate = new Date(currentYear + 1, 0, 1, 0, 0, 0, 0);
             let diff = newYearDate - now;
             
+            // Если Новый год уже прошел, берем следующий год
             if (diff < 0) {
                 newYearDate = new Date(currentYear + 2, 0, 1, 0, 0, 0, 0);
                 diff = newYearDate - now;
             }
             
+            // Вычисляем общее количество часов, минут, секунд
             const totalSeconds = Math.floor(diff / 1000);
-            const days = Math.floor(totalSeconds / (3600 * 24));
-            const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+            const totalHours = Math.floor(totalSeconds / 3600);
             const minutes = Math.floor((totalSeconds % 3600) / 60);
             const seconds = Math.floor(totalSeconds % 60);
             
-            document.getElementById('days').textContent = days.toString().padStart(2, '0');
-            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-        }
-        
-        // Управление видео
-        function setupVideo() {
-            const video = document.getElementById('video-background');
-            const muteButton = document.getElementById('mute-button');
-            const status = document.getElementById('video-status');
+            // Обновляем отображение
+            document.getElementById('hours').textContent = 
+                totalHours.toString().padStart(3, '0').slice(-3); // Максимум 999 часов
+            document.getElementById('minutes').textContent = 
+                minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = 
+                seconds.toString().padStart(2, '0');
             
-            // События видео
-            video.addEventListener('loadeddata', function() {
-                status.textContent = 'Видео загружено';
-                setTimeout(() => status.style.display = 'none', 2000);
-            });
-            
-            video.addEventListener('error', function() {
-                status.textContent = 'Ошибка загрузки видео';
-                status.style.color = '#f00';
-                status.style.display = 'block';
-            });
-            
-            video.addEventListener('waiting', function() {
-                status.textContent = 'Буферизация видео...';
-                status.style.display = 'block';
-            });
-            
-            video.addEventListener('playing', function() {
-                status.style.display = 'none';
-            });
-            
-            // Кнопка mute/unmute
-            muteButton.addEventListener('click', function() {
-                video.muted = !video.muted;
-                muteButton.textContent = video.muted ? '' : '';
-                muteButton.title = video.muted ? 'Включить звук' : 'Выключить звук';
-            });
-            
-            // Автозапуск видео (для некоторых браузеров)
-            function attemptPlay() {
-                const playPromise = video.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log('Автовоспроизведение заблокировано:', error);
-                        status.textContent = 'Нажмите для запуска видео';
-                        status.style.display = 'block';
-                        status.style.cursor = 'pointer';
-                        
-                        status.addEventListener('click', function() {
-                            video.play();
-                            status.style.display = 'none';
-                        });
-                    });
-                }
+            // Если часов больше 999, показываем 999
+            if (totalHours > 999) {
+                document.getElementById('hours').textContent = '999';
             }
-            
-            attemptPlay();
         }
         
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', function() {
-            applyConfig();
-            setupVideo();
-            
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-            
-            setupConfigPanel();
-        });
-        
+        // Применение настроек из конфигурации
         function applyConfig() {
             const container = document.getElementById('countdown-container');
             const overlay = document.getElementById('overlay');
@@ -362,82 +220,93 @@
             if (window.timerConfig) {
                 const config = window.timerConfig;
                 
+                // Применяем позицию
                 container.style.left = config.position.left;
                 container.style.top = config.position.top;
                 
+                // CSS переменные
                 root.style.setProperty('--timer-left', config.position.left);
                 root.style.setProperty('--timer-top', config.position.top);
                 root.style.setProperty('--font-size', config.fontSize + 'px');
                 root.style.setProperty('--timer-color', config.color);
                 root.style.setProperty('--label-color', config.labelColor);
+                root.style.setProperty('--overlay-opacity', config.overlayOpacity || 0.3);
                 
+                // Затемнение фона
                 overlay.style.backgroundColor = `rgba(0, 0, 0, ${config.overlayOpacity || 0.3})`;
+                
+                // Показываем индикатор применения настроек
+                const indicator = document.getElementById('config-indicator');
+                indicator.style.display = 'block';
+                setTimeout(() => {
+                    indicator.style.display = 'none';
+                }, 3000);
             }
         }
         
-        function setupConfigPanel() {
-            const configPanel = document.getElementById('config-panel');
-            const toggleBtn = document.getElementById('toggle-config');
-            const saveBtn = document.getElementById('save-config');
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем настройки
+            loadConfig();
             
-            // Горячая клавиша для панели настроек
-            document.addEventListener('keydown', function(e) {
-                if (e.ctrlKey && e.shiftKey && e.key === 'E') { // Ctrl+Shift+E
-                    configPanel.style.display = 
-                        configPanel.style.display === 'none' ? 'block' : 'none';
+            // Применяем настройки
+            applyConfig();
+            
+            // Настраиваем видео
+            setupVideo();
+            
+            // Запускаем таймер
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            
+            // Слушаем изменения в localStorage (для обновления настроек в реальном времени)
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'timerConfig') {
+                    loadConfig();
+                    applyConfig();
                 }
             });
             
-            // Заполнение полей
-            if (window.timerConfig) {
-                document.getElementById('input-left').value = window.timerConfig.position.left;
-                document.getElementById('input-top').value = window.timerConfig.position.top;
-                document.getElementById('input-font-size').value = window.timerConfig.fontSize;
-                document.getElementById('input-color').value = window.timerConfig.color;
-                document.getElementById('input-label-color').value = window.timerConfig.labelColor;
-                document.getElementById('input-overlay').value = window.timerConfig.overlayOpacity || 0.3;
-            }
-            
-            toggleBtn.addEventListener('click', function() {
-                configPanel.style.display = 'none';
-            });
-            
-            saveBtn.addEventListener('click', function() {
-                const newConfig = {
-                    position: {
-                        left: document.getElementById('input-left').value,
-                        top: document.getElementById('input-top').value
-                    },
-                    fontSize: parseInt(document.getElementById('input-font-size').value),
-                    color: document.getElementById('input-color').value,
-                    labelColor: document.getElementById('input-label-color').value,
-                    overlayOpacity: parseFloat(document.getElementById('input-overlay').value)
-                };
-                
-                localStorage.setItem('timerConfig', JSON.stringify(newConfig));
-                window.timerConfig = newConfig;
-                applyConfig();
-                
-                // Визуальное подтверждение
-                saveBtn.textContent = '✓ Сохранено!';
-                setTimeout(() => saveBtn.textContent = '💾 Сохранить настройки', 2000);
-            });
-            
-            // Загрузка сохраненных настроек
+            // Также проверяем изменения каждые 2 секунды (на случай если страница настроек открыта в этом же браузере)
+            setInterval(function() {
+                const savedConfig = localStorage.getItem('timerConfig');
+                if (savedConfig && JSON.stringify(window.timerConfig) !== savedConfig) {
+                    loadConfig();
+                    applyConfig();
+                }
+            }, 2000);
+        });
+        
+        // Загрузка конфигурации
+        function loadConfig() {
             const savedConfig = localStorage.getItem('timerConfig');
             if (savedConfig) {
-                window.timerConfig = JSON.parse(savedConfig);
-                applyConfig();
+                try {
+                    window.timerConfig = JSON.parse(savedConfig);
+                } catch (e) {
+                    console.error('Ошибка загрузки конфигурации:', e);
+                    // Используем конфиг по умолчанию
+                    if (window.defaultConfig) {
+                        window.timerConfig = window.defaultConfig;
+                    }
+                }
+            } else if (window.defaultConfig) {
+                window.timerConfig = window.defaultConfig;
             }
         }
         
-        // Функция для смены видео на лету (если нужно несколько видео)
-        window.changeVideo = function(videoUrl) {
+        // Настройка видео
+        function setupVideo() {
             const video = document.getElementById('video-background');
-            video.src = videoUrl;
-            video.load();
-            video.play();
-        };
+            
+            // Пытаемся запустить автовоспроизведение
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log('Автовоспроизведение видео заблокировано');
+                });
+            }
+        }
     </script>
 </body>
 </html>

@@ -175,6 +175,61 @@
     <!-- Подключение скриптов -->
     <script src="config.js"></script>
     <script>
+        <script>
+    // Диагностика загрузки видео
+    function checkVideoLoad() {
+        const video = document.getElementById('video-background');
+        const status = document.createElement('div');
+        status.id = 'video-debug';
+        status.style.cssText = `
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 9999;
+            font-family: monospace;
+            font-size: 12px;
+        `;
+        document.body.appendChild(status);
+
+        const events = [
+            'loadstart', 'progress', 'loadeddata', 'canplay',
+            'playing', 'waiting', 'error', 'stalled'
+        ];
+
+        events.forEach(event => {
+            video.addEventListener(event, (e) => {
+                const time = new Date().toLocaleTimeString();
+                status.innerHTML = `
+                    <div>${time} - ${event}</div>
+                    <div>Видео: ${video.currentSrc}</div>
+                    <div>Размер: ${video.videoWidth}x${video.videoHeight}</div>
+                    <div>Ошибка: ${video.error ? video.error.message : 'нет'}</div>
+                `;
+                console.log(`Видео ${event}:`, e);
+            });
+        });
+
+        // Проверка доступности файла
+        setTimeout(() => {
+            fetch('background.mp4', { method: 'HEAD' })
+                .then(response => {
+                    status.innerHTML += `<div>Статус файла: ${response.status} ${response.statusText}</div>`;
+                    console.log('Статус файла:', response.status);
+                })
+                .catch(err => {
+                    status.innerHTML += `<div>Ошибка fetch: ${err.message}</div>`;
+                    console.error('Ошибка проверки файла:', err);
+                });
+        }, 1000);
+    }
+
+    // Вызываем при загрузке
+    document.addEventListener('DOMContentLoaded', checkVideoLoad);
+</script>
         // Основной скрипт таймера (формат: часы:минуты:секунды)
         function updateCountdown() {
             const now = new Date();

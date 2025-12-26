@@ -14,13 +14,16 @@ window.defaultConfig = {
     // Прозрачность затемняющего слоя
     overlayOpacity: 0.3,
     
-    // Формат времени (true - часы, false - дни)
+    // Видеофон (по умолчанию)
+    videoUrl: "background.mp4",
+    
+    // Формат времени
     showHours: true,
     
     // Настройки шрифта
     fontSettings: {
         family: "'Inter', sans-serif",
-        weight: "800", // Extra Bold
+        weight: "800",
         style: "normal"
     },
     
@@ -29,34 +32,49 @@ window.defaultConfig = {
         autoplay: true,
         muted: true,
         loop: true,
-        controls: false
+        controls: false,
+        volume: 0
     }
 };
 
-// Пресеты для разных шрифтов (если захотите добавить другие варианты)
-window.fontPresets = {
-    interExtraBold: {
-        fontSettings: {
-            family: "'Inter', sans-serif",
-            weight: "800",
-            style: "normal"
-        }
+// Список поддерживаемых видео
+window.videoLibrary = [
+    {
+        name: "Новогоднее видео",
+        path: "background.mp4",
+        type: "mp4",
+        resolution: "7360×1620",
+        size: "~50MB"
     },
-    interBlack: {
-        fontSettings: {
-            family: "'Inter', sans-serif",
-            weight: "900",
-            style: "normal"
-        }
+    {
+        name: "Старое видео",
+        path: "old.mp4",
+        type: "mp4",
+        resolution: "7360×1620",
+        size: "~45MB"
     },
-    robotoBold: {
-        fontSettings: {
-            family: "'Roboto', sans-serif",
-            weight: "700",
-            style: "normal"
-        }
+    {
+        name: "Фейерверки",
+        path: "videos/fireworks.mp4",
+        type: "mp4",
+        resolution: "7360×1620",
+        size: "~60MB"
+    },
+    {
+        name: "Снегопад",
+        path: "videos/snowfall.mp4",
+        type: "mp4",
+        resolution: "7360×1620",
+        size: "~40MB"
+    },
+    {
+        name: "Северное сияние",
+        path: "videos/aurora.mp4",
+        type: "mp4",
+        resolution: "7360×1620",
+        size: "~55MB"
     }
-};
+];
 
 // Загружаем сохраненную конфигурацию при запуске
 (function() {
@@ -64,10 +82,13 @@ window.fontPresets = {
     if (savedConfig) {
         try {
             window.timerConfig = JSON.parse(savedConfig);
-            // Убедимся, что настройки шрифта есть
-            if (!window.timerConfig.fontSettings) {
-                window.timerConfig.fontSettings = { ...window.defaultConfig.fontSettings };
-            }
+            
+            // Убедимся, что все обязательные поля есть
+            window.timerConfig = {
+                ...window.defaultConfig,
+                ...window.timerConfig
+            };
+            
         } catch (e) {
             console.error('Ошибка загрузки конфигурации:', e);
             window.timerConfig = { ...window.defaultConfig };

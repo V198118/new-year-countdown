@@ -138,12 +138,12 @@
     </style>
 </head>
 <body>
-    <!-- Видео-фон -->
-    <video id="video-background" autoplay muted loop playsinline>
-        <source src="background.mp4" type="video/mp4">
-        <source src="background.webm" type="video/webm">
-        Ваш браузер не поддерживает видео.
-    </video>
+   <!-- Видео-фон - ТОЛЬКО MP4 для надежности -->
+<video id="video-background" autoplay muted loop playsinline>
+    <source src="background.mp4" type="video/mp4">
+    <!-- Удаляем webm, если его нет -->
+    Ваш браузер не поддерживает видео.
+</video>
     
     <!-- Затемнение для контраста -->
     <div id="overlay"></div>

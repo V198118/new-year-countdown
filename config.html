@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Настройки таймера</title>
     
-    <!-- Подключаем тот же шрифт Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -26,7 +25,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
@@ -47,10 +46,6 @@
             font-size: 2.5em;
             margin-bottom: 10px;
             color: #4CAF50;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
             font-weight: 800;
         }
         
@@ -60,43 +55,26 @@
             font-weight: 400;
         }
         
-        .preview-section {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        #preview {
-            font-size: 60px;
-            font-weight: 800; /* Inter Extra Bold */
-            color: #fff;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-            margin: 20px 0;
-            font-family: 'Inter', 'Courier New', monospace;
-            letter-spacing: 5px;
-            font-variant-numeric: tabular-nums;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        
         .config-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 25px;
             margin-bottom: 30px;
         }
         
         .config-group {
             background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
             border-left: 4px solid #4CAF50;
         }
         
+        .config-group.wide {
+            grid-column: 1 / -1;
+        }
+        
         .config-group h3 {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             color: #4CAF50;
             display: flex;
             align-items: center;
@@ -106,13 +84,14 @@
         
         .config-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #ccc;
             font-weight: 500;
         }
         
         .config-group input, 
-        .config-group select {
+        .config-group select,
+        .config-group textarea {
             width: 100%;
             padding: 12px;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -124,12 +103,82 @@
             transition: all 0.3s;
         }
         
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
         .color-inputs {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
         
+        /* Стили для предпросмотра видео */
+        #video-preview-container {
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        #video-preview {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: none;
+        }
+        
+        #video-status {
+            padding: 10px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .video-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .video-thumb {
+            position: relative;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .video-thumb:hover {
+            transform: translateY(-5px);
+            border-color: #4CAF50;
+        }
+        
+        .video-thumb.active {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+        }
+        
+        .video-thumb img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+        
+        .video-thumb .video-name {
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Пресеты */
         .presets {
             display: flex;
             flex-wrap: wrap;
@@ -161,15 +210,16 @@
         .preset-red { background: linear-gradient(135deg, #FF0000, #FF6666); }
         .preset-green { background: linear-gradient(135deg, #00FF00, #00AA00); }
         
+        /* Кнопки действий */
         .buttons {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            justify-content: center;
             margin-top: 30px;
         }
         
         .btn {
-            padding: 15px 30px;
+            padding: 15px 25px;
             border: none;
             border-radius: 8px;
             font-size: 18px;
@@ -180,7 +230,6 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            min-width: 200px;
             font-family: 'Inter', sans-serif;
         }
         
@@ -214,6 +263,7 @@
             background: linear-gradient(135deg, #1976D2, #1565C0);
         }
         
+        /* Инфо-боксы */
         .info-box {
             background: rgba(33, 150, 243, 0.1);
             border-left: 4px solid #2196F3;
@@ -226,8 +276,28 @@
         
         .info-box h4 {
             margin-bottom: 10px;
-            color: #2196F3;
+            color: #2196F50;
             font-weight: 700;
+        }
+        
+        .info-box code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        /* Состояния */
+        .success {
+            color: #4CAF50;
+        }
+        
+        .error {
+            color: #f44336;
+        }
+        
+        .warning {
+            color: #ff9800;
         }
         
         footer {
@@ -238,28 +308,15 @@
             font-weight: 400;
         }
         
+        /* Адаптивность */
         @media (max-width: 768px) {
             .config-grid {
                 grid-template-columns: 1fr;
             }
             
             .buttons {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
-            
-            .btn {
-                width: 100%;
-            }
-        }
-        
-        /* Стиль для предпросмотра, соответствующий таймеру */
-        .preview-label {
-            font-size: 18px;
-            color: #90EE90;
-            margin-top: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -267,18 +324,74 @@
     <div class="container">
         <header>
             <h1>⚙️ Настройки таймера</h1>
-            <p class="subtitle">Используется шрифт Inter Extra Bold (800)</p>
+            <p class="subtitle">Выберите видеофон и настройте внешний вид</p>
         </header>
         
-        <div class="preview-section">
-            <h3>Предпросмотр с Inter Extra Bold</h3>
-            <div id="preview">123:45:67</div>
-            <div class="preview-label">Часы &nbsp;&nbsp;&nbsp; Минуты &nbsp;&nbsp;&nbsp; Секунды</div>
-            <p>Формат: Часы:Минуты:Секунды (максимум 999 часов)</p>
-        </div>
-        
         <div class="config-grid">
-            <!-- Конфигурация остается такой же, как раньше -->
+            <!-- Секция выбора видео -->
+            <div class="config-group wide">
+                <h3>🎥 Выбор видеофона</h3>
+                
+                <label for="video-select">Выберите видео из списка:</label>
+                <select id="video-select">
+                    <option value="">-- Выберите видео --</option>
+                    <option value="background.mp4">Новогоднее видео (background.mp4)</option>
+                    <option value="old.mp4">Старое видео (old.mp4)</option>
+                    <option value="videos/fireworks.mp4">Фейерверки</option>
+                    <option value="videos/snowfall.mp4">Снегопад</option>
+                    <option value="videos/aurora.mp4">Северное сияние</option>
+                    <option value="custom">Введите свой URL...</option>
+                </select>
+                
+                <div id="custom-video-input" style="margin-top: 15px; display: none;">
+                    <label for="video-url">URL видеофона:</label>
+                    <input type="text" id="video-url" 
+                           placeholder="https://ваш-сайт.com/video.mp4 или имя файла">
+                    <small style="color: #888; display: block; margin-top: 5px;">
+                        Поддерживаются: MP4, WebM, OGG. Максимальный размер на GitHub: 100MB
+                    </small>
+                </div>
+                
+                <!-- Предпросмотр видео -->
+                <div id="video-preview-container">
+                    <video id="video-preview" controls></video>
+                    <div id="video-status">Выберите видео для предпросмотра</div>
+                </div>
+                
+                <!-- Миниатюры видео -->
+                <div class="video-thumbnails">
+                    <div class="video-thumb" data-video="background.mp4">
+                        <img src="https://via.placeholder.com/180x100/4CAF50/ffffff?text=Background" 
+                             alt="Новогоднее видео">
+                        <div class="video-name">Новогоднее видео</div>
+                    </div>
+                    <div class="video-thumb" data-video="old.mp4">
+                        <img src="https://via.placeholder.com/180x100/2196F3/ffffff?text=Old+Video" 
+                             alt="Старое видео">
+                        <div class="video-name">Старое видео</div>
+                    </div>
+                    <div class="video-thumb" data-video="videos/fireworks.mp4">
+                        <img src="https://via.placeholder.com/180x100/FF9800/ffffff?text=Fireworks" 
+                             alt="Фейерверки">
+                        <div class="video-name">Фейерверки</div>
+                    </div>
+                    <div class="video-thumb" data-video="videos/snowfall.mp4">
+                        <img src="https://via.placeholder.com/180x100/00BCD4/ffffff?text=Snowfall" 
+                             alt="Снегопад">
+                        <div class="video-name">Снегопад</div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <h4>💡 Как добавить свои видео:</h4>
+                    <p>1. Загрузите видео файл в папку вашего репозитория</p>
+                    <p>2. Укажите путь к файлу (например: <code>мои-видео/новое.mp4</code>)</p>
+                    <p>3. Или используйте полный URL к видео на другом сервере</p>
+                    <p><strong>Формат:</strong> MP4 (H.264) | <strong>Разрешение:</strong> 7360×1620</p>
+                </div>
+            </div>
+            
+            <!-- Секция позиционирования -->
             <div class="config-group">
                 <h3>📍 Позиция таймера</h3>
                 <label for="pos-x">Позиция по X:</label>
@@ -289,10 +402,11 @@
                 
                 <div class="info-box">
                     <h4>💡 Подсказка:</h4>
-                    <p>Используйте проценты (%) для относительного позиционирования или пиксели (px) для точного размещения.</p>
+                    <p>Используйте <code>50%</code> для центра или пиксели для точного позиционирования.</p>
                 </div>
             </div>
             
+            <!-- Секция внешнего вида -->
             <div class="config-group">
                 <h3>🎨 Внешний вид</h3>
                 <label for="font-size">Размер шрифта (px):</label>
@@ -321,77 +435,95 @@
             </div>
         </div>
         
+        <!-- Пресеты -->
         <div class="config-group">
             <h3>🚀 Быстрые пресеты</h3>
             <div class="presets">
-                <button class="preset-btn preset-gold" data-preset="gold">Золотой</button>
-                <button class="preset-btn preset-blue" data-preset="blue">Ледяной</button>
-                <button class="preset-btn preset-red" data-preset="red">Красный</button>
-                <button class="preset-btn preset-green" data-preset="green">Зеленый</button>
+                <button class="preset-btn preset-gold" data-preset="gold">Золотой + Фейерверки</button>
+                <button class="preset-btn preset-blue" data-preset="blue">Ледяной + Сияние</button>
+                <button class="preset-btn preset-red" data-preset="red">Красный + Снегопад</button>
+                <button class="preset-btn preset-green" data-preset="green">Зеленый + Стандарт</button>
             </div>
         </div>
         
+        <!-- Кнопки действий -->
         <div class="buttons">
             <button class="btn btn-primary" id="save-btn">
-                💾 Сохранить настройки
+                💾 Сохранить все настройки
             </button>
             <button class="btn btn-view" id="view-btn" onclick="window.open('index.html', '_blank')">
                 👁️ Посмотреть таймер
+            </button>
+            <button class="btn btn-secondary" id="test-btn">
+                ▶️ Проверить видео
             </button>
             <button class="btn btn-secondary" id="reset-btn">
                 🔄 Сбросить настройки
             </button>
         </div>
         
+        <!-- Информация -->
         <div class="info-box">
             <h4>ℹ️ Техническая информация:</h4>
-            <p><strong>Шрифт:</strong> Inter Extra Bold (font-weight: 800)</p>
-            <p><strong>Разрешение:</strong> 7360×1620 пикселей</p>
-            <p><strong>Формат времени:</strong> Часы:Минуты:Секунды</p>
-            <p><strong>Максимум:</strong> 999 часов (41 день)</p>
+            <p><strong>Текущее видео:</strong> <span id="current-video-info">Не выбрано</span></p>
             <p><strong>Ссылка на таймер:</strong> <code id="timer-url"></code></p>
             <p><strong>Ссылка на настройки:</strong> <code id="config-url"></code></p>
+            <p><strong>Разрешение экрана:</strong> 7360×1620 пикселей</p>
+            <p><strong>Формат времени:</strong> Часы:Минуты:Секунды (до 999 часов)</p>
         </div>
         
         <footer>
             <p>Таймер до Нового Года • Inter Extra Bold • LED-экран 7360×1620</p>
-            <p>Шрифт оптимизирован для высокой читаемости на больших экранах</p>
+            <p>Настройки сохраняются автоматически и применяются в реальном времени</p>
         </footer>
     </div>
 
     <script src="config.js"></script>
     <script>
-        // Определение пресетов
+        // Определение пресетов с видео
         const presets = {
             gold: {
                 position: { left: "50%", top: "70%" },
                 fontSize: 220,
                 color: "#FFD700",
                 labelColor: "#FFA500",
-                overlayOpacity: 0.4
+                overlayOpacity: 0.4,
+                videoUrl: "videos/fireworks.mp4"
             },
             blue: {
                 position: { left: "60%", top: "60%" },
                 fontSize: 180,
                 color: "#00FFFF",
                 labelColor: "#87CEEB",
-                overlayOpacity: 0.2
+                overlayOpacity: 0.2,
+                videoUrl: "videos/aurora.mp4"
             },
             red: {
                 position: { left: "40%", top: "80%" },
                 fontSize: 200,
                 color: "#FF0000",
                 labelColor: "#FF6666",
-                overlayOpacity: 0.25
+                overlayOpacity: 0.25,
+                videoUrl: "videos/snowfall.mp4"
             },
             green: {
                 position: { left: "50%", top: "50%" },
                 fontSize: 190,
                 color: "#00FF00",
                 labelColor: "#90EE90",
-                overlayOpacity: 0.35
+                overlayOpacity: 0.35,
+                videoUrl: "background.mp4"
             }
         };
+        
+        // Элементы DOM
+        const videoSelect = document.getElementById('video-select');
+        const customVideoInput = document.getElementById('custom-video-input');
+        const videoUrlInput = document.getElementById('video-url');
+        const videoPreview = document.getElementById('video-preview');
+        const videoStatus = document.getElementById('video-status');
+        const videoThumbnails = document.querySelectorAll('.video-thumb');
+        const currentVideoInfo = document.getElementById('current-video-info');
         
         // Загрузка текущих настроек
         function loadCurrentConfig() {
@@ -408,33 +540,135 @@
                     document.getElementById('label-color').value = config.labelColor;
                     document.getElementById('overlay').value = config.overlayOpacity || 0.3;
                     
-                    updatePreview();
+                    // Заполняем видео
+                    if (config.videoUrl) {
+                        updateVideoSelection(config.videoUrl);
+                        currentVideoInfo.textContent = config.videoUrl;
+                    }
+                    
                 } catch (e) {
                     console.error('Ошибка загрузки настроек:', e);
                 }
             }
         }
         
-        // Обновление предпросмотра с Inter Extra Bold
-        function updatePreview() {
-            const preview = document.getElementById('preview');
-            const fontSize = parseInt(document.getElementById('font-size').value) || 200;
-            const color = document.getElementById('color').value;
+        // Обновление выбора видео
+        function updateVideoSelection(videoUrl) {
+            // Проверяем, есть ли видео в списке
+            let found = false;
+            const options = videoSelect.options;
             
-            preview.style.fontSize = (fontSize * 0.3) + 'px';
-            preview.style.color = color;
-            preview.style.textShadow = `2px 2px 10px ${color}40`;
-            preview.style.fontWeight = '800'; // Inter Extra Bold
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value === videoUrl) {
+                    videoSelect.value = videoUrl;
+                    found = true;
+                    break;
+                }
+            }
             
-            // Обновляем цифры предпросмотра
-            const hours = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-            const minutes = Math.floor(Math.random() * 60).toString().padStart(2, '0');
-            const seconds = Math.floor(Math.random() * 60).toString().padStart(2, '0');
-            preview.textContent = `${hours}:${minutes}:${seconds}`;
+            // Если не нашли в списке, выбираем "custom"
+            if (!found && videoUrl) {
+                videoSelect.value = 'custom';
+                customVideoInput.style.display = 'block';
+                videoUrlInput.value = videoUrl;
+            }
+            
+            // Сбрасываем активные миниатюры
+            videoThumbnails.forEach(thumb => {
+                thumb.classList.remove('active');
+                if (thumb.dataset.video === videoUrl) {
+                    thumb.classList.add('active');
+                }
+            });
+            
+            // Обновляем предпросмотр
+            if (videoUrl) {
+                previewVideo(videoUrl);
+            }
+        }
+        
+        // Предпросмотр видео
+        function previewVideo(videoUrl) {
+            if (!videoUrl) return;
+            
+            videoStatus.textContent = 'Загрузка видео...';
+            videoStatus.className = '';
+            
+            // Создаем полный URL для предпросмотра
+            let fullUrl = videoUrl;
+            if (!videoUrl.startsWith('http') && !videoUrl.startsWith('blob:')) {
+                // Относительный путь - добавляем базовый URL
+                const baseUrl = window.location.href.replace(/\/[^\/]*$/, '/');
+                fullUrl = baseUrl + videoUrl;
+            }
+            
+            videoPreview.src = fullUrl;
+            videoPreview.style.display = 'block';
+            
+            // Обработчики событий видео
+            videoPreview.onloadeddata = function() {
+                videoStatus.textContent = `Видео загружено: ${this.videoWidth}×${this.videoHeight}`;
+                videoStatus.className = 'success';
+            };
+            
+            videoPreview.onerror = function() {
+                videoStatus.textContent = 'Ошибка загрузки видео. Проверьте URL или путь к файлу.';
+                videoStatus.className = 'error';
+                videoPreview.style.display = 'none';
+            };
+            
+            videoPreview.onwaiting = function() {
+                videoStatus.textContent = 'Буферизация видео...';
+                videoStatus.className = 'warning';
+            };
+            
+            videoPreview.load();
+        }
+        
+        // Проверка доступности видео
+        function testVideo() {
+            const videoUrl = getSelectedVideoUrl();
+            if (!videoUrl) {
+                alert('Выберите видео для проверки');
+                return;
+            }
+            
+            previewVideo(videoUrl);
+            
+            // Дополнительная проверка через fetch
+            let testUrl = videoUrl;
+            if (!testUrl.startsWith('http')) {
+                const baseUrl = window.location.href.replace(/\/[^\/]*$/, '/');
+                testUrl = baseUrl + videoUrl;
+            }
+            
+            fetch(testUrl, { method: 'HEAD' })
+                .then(response => {
+                    const message = `Файл доступен. Статус: ${response.status} ${response.statusText}`;
+                    console.log('Проверка видео:', message);
+                })
+                .catch(error => {
+                    console.warn('Ошибка проверки видео:', error);
+                });
+        }
+        
+        // Получение выбранного URL видео
+        function getSelectedVideoUrl() {
+            const selected = videoSelect.value;
+            if (selected === 'custom') {
+                return videoUrlInput.value.trim();
+            }
+            return selected;
         }
         
         // Сохранение настроек
         function saveConfig() {
+            const videoUrl = getSelectedVideoUrl();
+            if (!videoUrl) {
+                alert('Пожалуйста, выберите видеофон');
+                return;
+            }
+            
             const newConfig = {
                 position: {
                     left: document.getElementById('pos-x').value.trim() || "50%",
@@ -443,19 +677,20 @@
                 fontSize: parseInt(document.getElementById('font-size').value) || 200,
                 color: document.getElementById('color').value,
                 labelColor: document.getElementById('label-color').value,
-                overlayOpacity: parseFloat(document.getElementById('overlay').value)
+                overlayOpacity: parseFloat(document.getElementById('overlay').value),
+                videoUrl: videoUrl
             };
             
             // Сохраняем в localStorage
             localStorage.setItem('timerConfig', JSON.stringify(newConfig));
             
-            // Обновляем предпросмотр
-            updatePreview();
+            // Обновляем информацию о текущем видео
+            currentVideoInfo.textContent = videoUrl;
             
             // Показываем уведомление
             const saveBtn = document.getElementById('save-btn');
             const originalText = saveBtn.innerHTML;
-            saveBtn.innerHTML = '✓ Сохранено!';
+            saveBtn.innerHTML = '✓ Настройки сохранены!';
             saveBtn.style.background = 'linear-gradient(135deg, #2E7D32, #1B5E20)';
             
             setTimeout(() => {
@@ -479,7 +714,8 @@
                 document.getElementById('label-color').value = preset.labelColor;
                 document.getElementById('overlay').value = preset.overlayOpacity;
                 
-                updatePreview();
+                // Обновляем видео
+                updateVideoSelection(preset.videoUrl);
                 
                 // Автоматически сохраняем пресет
                 setTimeout(saveConfig, 100);
@@ -497,7 +733,7 @@
             }
         }
         
-        // Обновление URL'ов для информации
+        // Обновление URL'ов
         function updateUrls() {
             const baseUrl = window.location.href.replace('config.html', '');
             document.getElementById('timer-url').textContent = baseUrl + 'index.html';
@@ -509,9 +745,30 @@
             // Загружаем текущие настройки
             loadCurrentConfig();
             
+            // Обработчики для видео селектора
+            videoSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customVideoInput.style.display = 'block';
+                } else {
+                    customVideoInput.style.display = 'none';
+                    if (this.value) {
+                        updateVideoSelection(this.value);
+                    }
+                }
+            });
+            
+            // Обработчики для миниатюр видео
+            videoThumbnails.forEach(thumb => {
+                thumb.addEventListener('click', function() {
+                    const videoUrl = this.dataset.video;
+                    updateVideoSelection(videoUrl);
+                });
+            });
+            
             // Назначаем обработчики событий
             document.getElementById('save-btn').addEventListener('click', saveConfig);
             document.getElementById('reset-btn').addEventListener('click', resetConfig);
+            document.getElementById('test-btn').addEventListener('click', testVideo);
             
             // Обработчики для пресетов
             document.querySelectorAll('.preset-btn').forEach(btn => {
@@ -521,20 +778,8 @@
                 });
             });
             
-            // Обновление предпросмотра при изменении настроек
-            document.querySelectorAll('input, select').forEach(input => {
-                input.addEventListener('input', updatePreview);
-                input.addEventListener('change', updatePreview);
-            });
-            
             // Обновляем URL'ы
             updateUrls();
-            
-            // Показываем предпросмотр
-            updatePreview();
-            
-            // Запускаем анимацию предпросмотра (меняем цифры каждые 3 секунды)
-            setInterval(updatePreview, 3000);
         });
     </script>
 </body>
